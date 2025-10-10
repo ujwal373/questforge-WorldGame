@@ -1,0 +1,15 @@
+{
+    "regions": [
+      {"id": "forest", "heat": 0.3, "danger": 0.6},
+      {"id": "town_square", "heat": 0.5, "danger": 0.1}
+    ],
+    "characters": [
+      {"id": "blacksmith", "mood": "wary", "needs": ["ore"], "trust": {"p1": 0.0}}
+    ],
+    "items": [
+      {"id": "rare_ore", "loc": "cave"}
+    ],
+    "flags": {"festival_active": false},
+    "players": {}
+  }
+  

@@ -1,0 +1,50 @@
+version: '3.9'
+services:
+  api:
+    build:
+      context: ../../
+      dockerfile: infra/docker/python.dockerfile
+    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8000 --reload
+    environment:
+      - API_HOST=${API_HOST}
+      - API_PORT=${API_PORT}
+      - WORLD_URL=${WORLD_URL}
+      - NARRATOR_URL=${NARRATOR_URL}
+      - EVENTMASTER_URL=${EVENTMASTER_URL}
+      - NPC_BLACKSMITH_URL=${NPC_BLACKSMITH_URL}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../../:/app
+
+  world:
+    build:
+      context: ../../
+      dockerfile: infra/docker/python.dockerfile
+    command: uvicorn agents.world.service:app --host 0.0.0.0 --port 8010 --reload
+    volumes:
+      - ../../:/app
+
+  narrator:
+    build:
+      context: ../../
+      dockerfile: infra/docker/python.dockerfile
+    command: uvicorn agents.narrator.service:app --host 0.0.0.0 --port 8020 --reload
+    volumes:
+      - ../../:/app
+
+  eventmaster:
+    build:
+      context: ../../
+      dockerfile: infra/docker/python.dockerfile
+    command: uvicorn agents.eventmaster.service:app --host 0.0.0.0 --port 8030 --reload
+    volumes:
+      - ../../:/app
+
+  npc_blacksmith:
+    build:
+      context: ../../
+      dockerfile: infra/docker/python.dockerfile
+    command: uvicorn agents.npc_blacksmith.service:app --host 0.0.0.0 --port 8040 --reload
+    volumes:
+      - ../../:/app
