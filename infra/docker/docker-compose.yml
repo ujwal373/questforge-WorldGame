@@ -8,10 +8,13 @@ services:
     environment:
       - API_HOST=${API_HOST}
       - API_PORT=${API_PORT}
-      - WORLD_URL=${WORLD_URL}
-      - NARRATOR_URL=${NARRATOR_URL}
-      - EVENTMASTER_URL=${EVENTMASTER_URL}
-      - NPC_BLACKSMITH_URL=${NPC_BLACKSMITH_URL}
+      - WORLD_URL=${WORLD_URL:-http://world:8010}
+      - NARRATOR_URL=${NARRATOR_URL:-http://narrator:8020}
+      - EVENTMASTER_URL=${EVENTMASTER_URL:-http://eventmaster:8030}
+      - NPC_BLACKSMITH_URL=${NPC_BLACKSMITH_URL:-http://npc_blacksmith:8040}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - MODEL=${MODEL:-gpt-4o-mini}
+
     ports:
       - "8000:8000"
     volumes:

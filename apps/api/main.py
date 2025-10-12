@@ -4,9 +4,11 @@ import httpx
 from fastapi import FastAPI
 from apps.api.utils import Command, WorldResponse
 
-WORLD_URL = os.getenv("WORLD_URL", "http://localhost:8010")
-NARRATOR_URL = os.getenv("NARRATOR_URL", "http://localhost:8020")
-EVENTMASTER_URL = os.getenv("EVENTMASTER_URL", "http://localhost:8030")
+# Robust: fallback if var is unset OR empty
+WORLD_URL = os.getenv("WORLD_URL") or "http://world:8010"
+NARRATOR_URL = os.getenv("NARRATOR_URL") or "http://narrator:8020"
+EVENTMASTER_URL = os.getenv("EVENTMASTER_URL") or "http://eventmaster:8030"
+NPC_BLACKSMITH_URL = os.getenv("NPC_BLACKSMITH_URL") or "http://npc_blacksmith:8040"
 
 app = FastAPI(title="QuestForge API")
 
