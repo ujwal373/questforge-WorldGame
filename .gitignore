@@ -1,8 +1,23 @@
-# Ignore the virtual environment directory
-env/
-
-# Ignore environment variable files
-.env
-
-# Ignore pycache
+# Python
 __pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Env & local config
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# App data
+runs/
+.runs/
