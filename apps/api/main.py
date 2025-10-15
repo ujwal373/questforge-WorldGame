@@ -32,3 +32,12 @@ async def play(cmd: Command):
         story = nj["story"]
         choices = nj.get("choices", ["inspect forest","talk blacksmith","move town_square"])
     return WorldResponse(story=story, world=world, choices=choices)
+
+@app.post("/admin/tick")
+async def admin_tick():
+    async with httpx.AsyncClient() as client:
+        w = await client.post(f"{WORLD_URL}/tick")
+        world = w.json()
+        # let EventMaster react to the new world
+        await client.post(f"{EVENTMASTER_URL}/maybe", json={"world": world})
+    return {"ok": True}
