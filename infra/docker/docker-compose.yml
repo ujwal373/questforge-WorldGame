@@ -1,28 +1,27 @@
 version: '3.9'
+
 services:
   api:
     build:
       context: ../../
       dockerfile: infra/docker/python.dockerfile
-    command: streamlit run apps/ui/app.py --server.address 0.0.0.0 --server.port 8501
+    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
-      - API_HOST=${API_HOST}
-      - API_PORT=${API_PORT}
+      - API_HOST=${API_HOST:-0.0.0.0}
+      - API_PORT=${API_PORT:-8000}
       - WORLD_URL=${WORLD_URL:-http://world:8010}
       - NARRATOR_URL=${NARRATOR_URL:-http://narrator:8020}
       - EVENTMASTER_URL=${EVENTMASTER_URL:-http://eventmaster:8030}
       - NPC_BLACKSMITH_URL=${NPC_BLACKSMITH_URL:-http://npc_blacksmith:8040}
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - MODEL=${MODEL:-gpt-4o-mini}
-      - API_URL=http://api:8000
-      
     ports:
       - "8000:8000"
-      - "8501:8501"
     volumes:
       - ../../:/app
     depends_on:
-      - api
+      - world
+      - narrator
+      - eventmaster
+      - npc_blacksmith
 
   world:
     build:
@@ -37,6 +36,9 @@ services:
       context: ../../
       dockerfile: infra/docker/python.dockerfile
     command: uvicorn agents.narrator.service:app --host 0.0.0.0 --port 8020 --reload
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - MODEL=${MODEL:-gpt-4o-mini}
     volumes:
       - ../../:/app
 
@@ -55,3 +57,17 @@ services:
     command: uvicorn agents.npc_blacksmith.service:app --host 0.0.0.0 --port 8040 --reload
     volumes:
       - ../../:/app
+
+  ui:
+    build:
+      context: ../../
+      dockerfile: infra/docker/python.dockerfile
+    command: streamlit run apps/ui/app.py --server.address 0.0.0.0 --server.port 8501
+    environment:
+      - API_URL=http://api:8000
+    ports:
+      - "8501:8501"
+    volumes:
+      - ../../:/app
+    depends_on:
+      - api
